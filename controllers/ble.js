@@ -2,19 +2,15 @@ const axios = require("axios");
 
 let simulateByIdFlag = false;
 let simulateAllFlag = false;
-let defaultData = [];
 
-const range = 50;
-const measuredPower = -59;
-const anglePitchMax = 90;
-const anglePitchMin = -90;
-const angleRollMax = 180;
-const angleRollMin = -180;
-const movementCountMax = 3000;
-const movementCountMin = 0;
-const batteryCountMax = 3000;
-const batteryCountMin = 2000;
-
+const logitudeMax = 67.33489110379261;
+const latitudeMax = 24.77246069072484;
+const latitudeMin = 24.768141172216463;
+const logitudeMin = 67.33489110379261;
+const speed = 0;
+const batterylevel = 99;
+const xAxis = 0;
+const yAxis = 0;
 const repeatFunctionAll = async (checkedData, token, intervalTimer) => {
   if (!simulateAllFlag) {
     clearInterval(intervalTimer);
@@ -27,41 +23,36 @@ const repeatFunctionAll = async (checkedData, token, intervalTimer) => {
   };
   // now you can get the string
   let isodate = date.toISOString();
+  // const latitude1 = (
+  //   Math.random() * (latitudeMax - latitudeMin) +
+  //   latitudeMin
+  // ).toFixed(14);
+
+  // const logitude2 = (
+  //   Math.random() * (logitudeMax - logitudeMin) +
+  //   logitudeMin
+  // ).toFixed(14);
   checkedData.map(async (ble) => {
     console.log("Ble with id updated", ble.uid);
-    // const res2 = await axios.patch(
-    //   "https://at-backend1.herokuapp.com/sensor/update/data",
-    //   {
-    //     sensor: ble.uid,
-    //     anglePitch: Math.floor(
-    //       Math.random() * (anglePitchMax - anglePitchMin) + anglePitchMin
-    //     ),
-    //     angleRoll: Math.floor(
-    //       Math.random() * (angleRollMax - angleRollMin) + angleRollMin
-    //     ).toString(),
-    //     movementCount: Math.floor(
-    //       Math.random() * (movementCountMax - movementCountMin) +
-    //         movementCountMin
-    //     ),
-    //     batteryVoltage: Math.floor(
-    //       Math.random() * (batteryCountMax - batteryCountMin) + batteryCountMin
-    //     ),
-    //     intervalTime: 5000,
-    //     range: Math.floor(Math.random() * 3) + 1 + range,
-    //     measuredPower: measuredPower,
-    //     anglePitchMax: anglePitchMax,
-    //     anglePitchMin: anglePitchMin,
-    //     angleRollMax: angleRollMax,
-    //     angleRollMin: angleRollMin,
-    //     movementCountMax: movementCountMax,
-    //     movementCountMin: movementCountMin,
-    //     batteryCountMax: batteryCountMax,
-    //     batteryCountMin: batteryCountMin,
-    //     timestamp: isodate,
-    //   },
-    //   config
-    // );
-    //console.log(res2.data);
+    const res2 = await axios.patch(
+      "https://at-backend1.herokuapp.com/sensor/update/data",
+      {
+        sensor: ble.uid,
+        latitude: (
+          Math.random() * (latitudeMax - latitudeMin) +
+          latitudeMin
+        ).toFixed(14),
+        longitude: (
+          Math.random() * (logitudeMax - logitudeMin) +
+          logitudeMin
+        ).toFixed(14),
+        timestamp: isodate,
+        speed: speed,
+        batterylevel: batterylevel,
+      },
+      config
+    );
+    console.log(res2.data);
   });
 };
 
