@@ -17,7 +17,7 @@ const repeatFunctionAll = async (checkedData, token, intervalTimer) => {
     return;
   }
   let date = new Date();
-  date.setHours(date.getHours() - 5);
+  //  date.setHours(date.getHours() - 5);
   const config = {
     headers: { Authorization: token },
   };
