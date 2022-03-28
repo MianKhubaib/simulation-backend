@@ -17,26 +17,10 @@ const repeatFunctionAll = async (checkedData, token, intervalTimer) => {
     return;
   }
   let date = new Date();
-  //  date.setHours(date.getHours() - 5);
-  const config = {
-    headers: { Authorization: token },
-  };
-  // now you can get the string
   let isodate = date.toISOString();
-  // const latitude1 = (
-  //   Math.random() * (latitudeMax - latitudeMin) +
-  //   latitudeMin
-  // ).toFixed(14);
-
-  // const logitude2 = (
-  //   Math.random() * (logitudeMax - logitudeMin) +
-  //   logitudeMin
-  // ).toFixed(14);
   checkedData.map(async (ble) => {
-    console.log("Ble with id updated", ble.uid);
-    const res2 = await axios.patch(
-      "https://at-backend1.herokuapp.com/sensor/update/data",
-      {
+    try {
+      const data = {
         sensor: ble.uid,
         latitude: (
           Math.random() * (latitudeMax - latitudeMin) +
@@ -49,10 +33,16 @@ const repeatFunctionAll = async (checkedData, token, intervalTimer) => {
         timestamp: isodate,
         speed: speed,
         batterylevel: batterylevel,
-      },
-      config
-    );
-    console.log(res2.data);
+      };
+      console.log("Ble with id updated", ble.uid);
+      const res2 = await axios.patch(
+        "https://at-backend1.herokuapp.com/sensor/update/data",
+        data,
+        { headers: { Authorization: `${token}` } }
+      );
+    } catch (err) {
+      console.log("Error");
+    }
   });
 };
 
@@ -60,6 +50,7 @@ const simulateAll = async (req, res) => {
   const checkedData = req.body;
   // console.log(req.body)
   const token = req.header("authorization");
+  console.log("Token Here", token);
   try {
     simulateAllFlag = true;
     const intervalTimer = setInterval(async () => {
