@@ -38,10 +38,10 @@ const repeatFunctionAll = async (checkedData, token, intervalTimer) => {
       const res2 = await axios.patch(
         "https://at-backend1.herokuapp.com/sensor/update/data",
         data,
-        { headers: { Authorization: `${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {
-      console.log("Error");
+      console.log("Error", err);
     }
   });
 };
@@ -49,8 +49,15 @@ const repeatFunctionAll = async (checkedData, token, intervalTimer) => {
 const simulateAll = async (req, res) => {
   const checkedData = req.body;
   // console.log(req.body)
-  const token = req.header("authorization");
-  console.log("Token Here", token);
+  const loginResult = await axios.post(
+    "https://at-backend1.herokuapp.com/auth/login",
+    {
+      email: "miankhubaib63@gmail.com",
+      password: "1234",
+    }
+  );
+  const token = loginResult.data.access_token;
+  console.log("Token from login", token);
   try {
     simulateAllFlag = true;
     const intervalTimer = setInterval(async () => {
